@@ -22,6 +22,7 @@ OUTLINE_OPACITY = 0.2
 ROTATE_X = 110
 ROTATE_Y = 20
 ROTATE_Z = 5
+SCALE = (0.5, 0.5, 0.5)
 
 # axes config
 TOTAL_LENGTH = (30, 30, 30)

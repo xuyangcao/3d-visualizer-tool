@@ -20,6 +20,7 @@ if __name__ == '__main__':
     mask_transform.RotateX(ROTATE_X)
     mask_transform.RotateY(ROTATE_Y)
     mask_transform.RotateZ(ROTATE_Z)
+    mask_transform.Scale(SCALE)
 
     # renderer and render window
     renderer = vtk_utils.create_renderer()
