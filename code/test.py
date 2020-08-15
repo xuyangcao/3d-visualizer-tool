@@ -1,5 +1,5 @@
 import vtk
-from utils import VTKUtils
+from vtk_utils import * 
 from config import *
 
 if __name__ == '__main__':
@@ -9,10 +9,9 @@ if __name__ == '__main__':
     generate_outline_face = True
     # file_name = '../data/truth.nii.gz'
     file_name = '../data/0001_RLAT.nii.gz'
-    vtk_utils = VTKUtils()
 
     # reader
-    reader = vtk_utils.read_volume(file_name)
+    reader = read_volume(file_name)
 
     # transform
     mask_transform = vtk.vtkTransform()
@@ -23,19 +22,19 @@ if __name__ == '__main__':
     mask_transform.Scale(SCALE) # scale
 
     # renderer and render window
-    renderer = vtk_utils.create_renderer()
-    render_window = vtk_utils.create_renderwindow()
+    renderer = create_renderer()
+    render_window = create_renderwindow()
     render_window.AddRenderer(renderer)
 
     # mapper and actors for segmentation results
     n_labels = int(reader.GetOutput().GetScalarRange()[1])
     for idx in range(n_labels):
-        extracter = vtk_utils.create_mask_extractor(reader) # extracter
+        extracter = create_mask_extractor(reader) # extracter
         extracter.SetValue(0, idx+1)
-        smoother = vtk_utils.create_smoother(extracter, SMOOTH_FACTOR) # smoother
-        mapper = vtk_utils.create_mapper(stripper=smoother)
-        prop = vtk_utils.create_property(opacity=MASK_OPACITY[idx], color=MASK_COLORS[idx]) # property
-        actor = vtk_utils.create_actor(mapper=mapper, prop=prop) # actor
+        smoother = create_smoother(extracter, SMOOTH_FACTOR) # smoother
+        mapper = create_mapper(stripper=smoother)
+        prop = create_property(opacity=MASK_OPACITY[idx], color=MASK_COLORS[idx]) # property
+        actor = create_actor(mapper=mapper, prop=prop) # actor
         actor.SetUserTransform(mask_transform)
         renderer.AddActor(actor)
 
@@ -45,10 +44,10 @@ if __name__ == '__main__':
         outline.SetInputConnection(reader.GetOutputPort())
         if generate_outline_face: # show surface of the outline
             outline.GenerateFacesOn()
-        extracter = vtk_utils.create_mask_extractor(reader)
-        mapper = vtk_utils.create_mapper(stripper=outline)
-        prop = vtk_utils.create_property(opacity=OUTLINE_OPACITY, color=OUTLINE_COLOR)
-        actor = vtk_utils.create_actor(mapper=mapper, prop=prop)
+        extracter = create_mask_extractor(reader)
+        mapper = create_mapper(stripper=outline)
+        prop = create_property(opacity=OUTLINE_OPACITY, color=OUTLINE_COLOR)
+        actor = create_actor(mapper=mapper, prop=prop)
         actor.SetUserTransform(mask_transform)
         renderer.AddActor(actor)
 
