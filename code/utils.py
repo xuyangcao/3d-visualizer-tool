@@ -28,10 +28,10 @@ class VTKUtils():
         return mask_extractor
     
     def create_mapper(self, extracter):
-        cube_mapper = vtk.vtkPolyDataMapper()
-        cube_mapper.SetInputConnection(extracter.GetOutputPort())
-        cube_mapper.ScalarVisibilityOff()
-        return cube_mapper
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputConnection(extracter.GetOutputPort())
+        mapper.ScalarVisibilityOff()
+        return mapper
 
 
     def create_property(self, opacity=0.9, color=(1.0, 0.0, 0.0)):
@@ -57,14 +57,3 @@ class VTKUtils():
         render_window.SetWindowName(window_name)
         render_window.SetSize(window_size[0], window_size[1])
         return render_window
-
-
-if __name__ == '__main__':
-    file_name = '../data/haha.nii.gz'
-    img = sitk.ReadImage(file_name)
-    volume = sitk.GetArrayFromImage(img)
-    volume[volume != 0] = 1
-    volume = volume.astype(np.int8)
-    volume += 1
-    img = sitk.GetImageFromArray(volume)
-    sitk.WriteImage(img, '../data/haha_with_bg.nii.gz')  
