@@ -29,6 +29,7 @@ def outline_demo():
     # outline
     outline = vtk.vtkOutlineFilter()
     outline.SetInputConnection(source.GetOutputPort())
+    outline.GenerateFacesOn()
     mapper2 = vtk.vtkPolyDataMapper()
     mapper2.SetInputConnection(outline.GetOutputPort())
         
