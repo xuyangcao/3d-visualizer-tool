@@ -1,4 +1,3 @@
-
 # main window, only for Qt
 APPLICATION_TITLE = "3D Visualizer"
 MIN_IMG_WINDOW_WIDTH = 1000
@@ -11,7 +10,7 @@ MASK_COLORS = [
     (1, 1, 0.)
 ]
 MASK_OPACITY = [0.5, 0.5, 0.5, 0.5]
-MASK_SMOOTH_FACTOR = 500
+SMOOTH_FACTOR = 200
 MAX_LABEL_LENGTH = 10
 
 # outline config

@@ -27,12 +27,22 @@ class VTKUtils():
         mask_extractor.SetInputConnection(reader.GetOutputPort())
         return mask_extractor
     
-    def create_mapper(self, extracter):
+    def create_smoother(self, reducer, smooth_factor):
+        """
+        Reorients some points in the volume to smooth the render edges.
+        (https://www.vtk.org/doc/nightly/html/classvtkSmoothPolyDataFilter.html)
+        """
+        smoother = vtk.vtkSmoothPolyDataFilter()
+        smoother.SetInputConnection(reducer.GetOutputPort())
+        smoother.SetNumberOfIterations(smooth_factor)
+        smoother.BoundarySmoothingOn()
+        return smoother
+
+    def create_mapper(self, stripper):
         mapper = vtk.vtkPolyDataMapper()
-        mapper.SetInputConnection(extracter.GetOutputPort())
+        mapper.SetInputConnection(stripper.GetOutputPort())
         mapper.ScalarVisibilityOff()
         return mapper
-
 
     def create_property(self, opacity=0.9, color=(1.0, 0.0, 0.0)):
         prop = vtk.vtkProperty()
