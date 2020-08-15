@@ -24,11 +24,11 @@ class MainWindow(QtWidgets.QMainWindow, QtWidgets.QApplication):
         self.add_vtk_window_widget(row=0, col=1, row_span=3, col_span=3)
 
         # set layout and show
-        self.render_window.Render()
+        # self.render_window.Render()
         self.setWindowTitle(APPLICATION_TITLE)
         self.frame.setLayout(self.grid)
         self.setCentralWidget(self.frame)
-        self.interactor.Initialize()
+        # self.interactor.Initialize()
         self.show()
 
     @staticmethod
@@ -109,6 +109,9 @@ class MainWindow(QtWidgets.QMainWindow, QtWidgets.QApplication):
         axes_actor = vtk.vtkAxesActor()
         axes_actor.SetTotalLength(TOTAL_LENGTH[0], TOTAL_LENGTH[1], TOTAL_LENGTH[2]) # set axes length
         renderer.AddActor(axes_actor)
+
+        self.render_window.Render()
+        self.interactor.Initialize()
 
     def add_main_toolbar(self, row, col):
         toolbar_box = QtWidgets.QGroupBox("Main Toolbar")

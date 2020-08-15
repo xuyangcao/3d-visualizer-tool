@@ -7,8 +7,10 @@ if __name__ == '__main__':
     show_axes = True
     show_outline = True
     generate_outline_face = True
+    take_snapshot = True
     # file_name = '../data/truth.nii.gz'
     file_name = '../data/0001_RLAT.nii.gz'
+    snapshot_filename = './snapshot.png'
 
     # reader
     reader = read_volume(file_name)
@@ -56,10 +58,25 @@ if __name__ == '__main__':
         axes_actor = vtk.vtkAxesActor()
         axes_actor.SetTotalLength(TOTAL_LENGTH[0], TOTAL_LENGTH[1], TOTAL_LENGTH[2]) # set axes length
         renderer.AddActor(axes_actor)
+
+    # start render
+    render_window.Render()
     
+    # screenshot
+    if take_snapshot:
+        w2if = vtk.vtkWindowToImageFilter()
+        w2if.SetInput(render_window)
+        w2if.SetInputBufferTypeToRGB()
+        w2if.ReadFrontBufferOff()
+        w2if.Update()
+
+        writer = vtk.vtkPNGWriter()
+        writer.SetFileName(snapshot_filename)
+        writer.SetInputConnection(w2if.GetOutputPort())
+        writer.Write()
+
     # interactor
     interactor = vtk.vtkRenderWindowInteractor()
     interactor.SetRenderWindow(render_window)
     interactor.Initialize()
-    render_window.Render()
     interactor.Start()
