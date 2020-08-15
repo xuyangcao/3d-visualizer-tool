@@ -1,6 +1,9 @@
-# main window, only for Qt
-APPLICATION_TITLE = "3D Visualizer"
-MIN_IMG_WINDOW_WIDTH = 1000
+# main window, only for Qt GUI
+APPLICATION_TITLE = "3D Segmentation Visualizer"
+MIN_IMG_WINDOW_WIDTH = 700
+
+# renderer
+RENDERER_BG_COLOR = (1., 1., 1.)
 
 # mask config
 MASK_COLORS = [

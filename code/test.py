@@ -22,7 +22,7 @@ if __name__ == '__main__':
     mask_transform.Scale(SCALE) # scale
 
     # renderer and render window
-    renderer = create_renderer()
+    renderer = create_renderer(bg_color=RENDERER_BG_COLOR)
     render_window = create_renderwindow()
     render_window.AddRenderer(renderer)
 

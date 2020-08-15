@@ -51,9 +51,9 @@ def create_actor(mapper, prop):
     actor.SetProperty(prop)
     return actor
 
-def create_renderer():
+def create_renderer(bg_color):
     renderer = vtk.vtkRenderer()
-    renderer.SetBackground(1.0, 1.0, 1.0)
+    renderer.SetBackground(bg_color[0], bg_color[1], bg_color[2])
     return renderer
 
 def create_renderwindow(window_name=APPLICATION_TITLE, window_size=(600, 600)):
