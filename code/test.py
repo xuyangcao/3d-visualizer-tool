@@ -8,7 +8,7 @@ if __name__ == '__main__':
     show_outline = True
     generate_outline_face = True
     # file_name = '../data/truth.nii.gz'
-    file_name = '../data/haha.nii.gz'
+    file_name = '../data/0001_RLAT.nii.gz'
     vtk_utils = VTKUtils()
 
     # reader
