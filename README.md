@@ -1,2 +1,4 @@
-# 3d-visualizer-tool
-3D visualizer for medical image segmentation.
+# 3D-Visualizer-Tool
+3D visualizer tool for medical image segmentation.
+
+![](./code/resource/demo.png)

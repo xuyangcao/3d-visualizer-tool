@@ -1,11 +1,14 @@
+"""
+GUI config
+"""
 # main window, only for Qt GUI
 APPLICATION_TITLE = "3D Segmentation Visualizer"
 MIN_IMG_WINDOW_WIDTH = 700
 
-# renderer
-COMPARE = False
-RENDERER_BG_COLOR = (0., 0., 0.)
 
+"""
+VTK config
+"""
 # mask config
 MASK_COLORS = [
     (1, 0, 0),
@@ -13,15 +16,18 @@ MASK_COLORS = [
     (0, 0, 1),
     (1, 1, 0.)
 ]
-MASK_OPACITY = [0.5, 0.5, 0.5, 0.5]
+MASK_OPACITY = [0.9, 0.9, 0.9, 0.9]
 SMOOTH_FACTOR = 200
 MAX_LABEL_LENGTH = 10
 
+# renderer
+COMPARE = False
+RENDERER_BG_COLOR = (1., 1., 1.)
+
 # outline config
-SHOW_OUTLINE = False
+SHOW_OUTLINE = True
 OUTLINE_COLOR = (0, 1, 1)
 OUTLINE_OPACITY = 0.2
-
 
 # transform config
 ROTATE_X = 110
