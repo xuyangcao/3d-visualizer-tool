@@ -6,7 +6,7 @@ import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 from config import *
-from vtk_utils import *
+from utils.vtk_utils import *
 
 from windows.PreferenceDialog import PreferenceDialog
 

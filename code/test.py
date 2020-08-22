@@ -1,5 +1,5 @@
 import vtk
-from vtk_utils import * 
+from utils.vtk_utils import * 
 from config import *
 
 if __name__ == '__main__':
