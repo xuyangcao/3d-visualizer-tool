@@ -1,5 +1,6 @@
 import sys
 import PyQt5.QtWidgets as QtWidgets
+from PyQt5 import QtGui
 import PyQt5.QtCore as Qt
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
@@ -7,28 +8,34 @@ from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from config import *
 from vtk_utils import *
 
-class MainWindow(QtWidgets.QMainWindow, QtWidgets.QApplication):
-    def __init__(self, app):
-        self.app = app
+from windows.PreferenceDialog import PreferenceDialog
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
         QtWidgets.QMainWindow.__init__(self, None)
         # base setup
         self.frame, self.vtk_widget, self.renderer, self.render_window, self.interactor = self.setup()
         
+        # UI
+        self._init_ui()
+        
+    def _init_ui(self, ):
+        self.setWindowTitle(APPLICATION_TITLE)
+        self.setWindowIcon(QtGui.QIcon('./resource/logo.png'))
+        self.statusBar().showMessage('ready')
+
         # create grid for all the widgets
         self.grid = QtWidgets.QGridLayout()
-
         # add widgets to the grid
         self.add_menubar()
         self.add_main_toolbar(row=0, col=0)
-        self.add_views_widget(row=1, col=0)
         self.add_vtk_window_widget(row=0, col=1, row_span=3, col_span=3)
 
         # set layout and show
-        # self.render_window.Render()
-        self.setWindowTitle(APPLICATION_TITLE)
+        self.render_window.Render()
         self.frame.setLayout(self.grid)
         self.setCentralWidget(self.frame)
-        # self.interactor.Initialize()
+        self.interactor.Initialize()
         self.show()
 
     @staticmethod
@@ -54,14 +61,20 @@ class MainWindow(QtWidgets.QMainWindow, QtWidgets.QApplication):
 
     def add_menubar(self, ):
         menubar = self.menuBar()
+        # file menu
         file_menu = menubar.addMenu("File")
-
         open_file_action = QtWidgets.QAction("Open", self)
         open_file_action.setShortcut("Ctrl+o")
         open_file_action.setStatusTip('Open new File')
         open_file_action.triggered.connect(self.open_file)
-
         file_menu.addAction(open_file_action)
+        # edit menu
+        edit_menu = menubar.addMenu("Edit")
+        config_action = QtWidgets.QAction("Preference", self)
+        config_action.setShortcut("Ctrl+p")
+        config_action.triggered.connect(self.on_preference_triggered)
+        edit_menu.addAction(config_action)
+
 
     def open_file(self, ):
         file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '../data')
@@ -69,8 +82,19 @@ class MainWindow(QtWidgets.QMainWindow, QtWidgets.QApplication):
             self.setup_mask(self.renderer, file_name[0])            
         else:
             QtWidgets.QMessageBox.warning(self, "Warning", "file type invalid!")
+    
+    def on_preference_triggered(self, ):
+        p_Dlg = PreferenceDialog()
+        p_Dlg.exec_()
 
     def setup_mask(self, renderer, file_name):
+        if not COMPARE:
+            actors = renderer.GetActors()
+            actors.InitTraversal()
+            for i in range(actors.GetNumberOfItems()):
+                actor = actors.GetNextActor()
+                renderer.RemoveActor(actor)
+
         # reader
         reader = read_volume(file_name)
 
@@ -95,23 +119,27 @@ class MainWindow(QtWidgets.QMainWindow, QtWidgets.QApplication):
             renderer.AddActor(actor)
 
         # outline of the whole image
-        outline = vtk.vtkOutlineFilter() # show outline
-        outline.SetInputConnection(reader.GetOutputPort())
-        outline.GenerateFacesOn()
-        extracter = create_mask_extractor(reader)
-        mapper = create_mapper(stripper=outline)
+        if SHOW_OUTLINE:
+            outline = vtk.vtkOutlineFilter() # show outline
+            outline.SetInputConnection(reader.GetOutputPort())
+            outline.GenerateFacesOn()
+            extracter = create_mask_extractor(reader)
+            mapper = create_mapper(stripper=outline)
+        else:
+            extracter = create_mask_extractor(reader)
+            mapper = create_mapper(stripper=extracter)
         prop = create_property(opacity=OUTLINE_OPACITY, color=OUTLINE_COLOR)
         actor = create_actor(mapper=mapper, prop=prop)
         actor.SetUserTransform(mask_transform)
         renderer.AddActor(actor)
 
         # show axes for better visualization
-        axes_actor = vtk.vtkAxesActor()
-        axes_actor.SetTotalLength(TOTAL_LENGTH[0], TOTAL_LENGTH[1], TOTAL_LENGTH[2]) # set axes length
-        renderer.AddActor(axes_actor)
+        if SHOW_AXES:
+            axes_actor = vtk.vtkAxesActor()
+            axes_actor.SetTotalLength(TOTAL_LENGTH[0], TOTAL_LENGTH[1], TOTAL_LENGTH[2]) # set axes length
+            renderer.AddActor(axes_actor)
 
-        self.render_window.Render()
-        self.interactor.Initialize()
+        self.renderer.ResetCamera()
 
     def add_main_toolbar(self, row, col):
         toolbar_box = QtWidgets.QGroupBox("Main Toolbar")
@@ -128,26 +156,7 @@ class MainWindow(QtWidgets.QMainWindow, QtWidgets.QApplication):
         # must manually set column width for vtk_widget to maintain height:width ratio
         self.grid.setColumnMinimumWidth(col, MIN_IMG_WINDOW_WIDTH)
 
-    def add_views_widget(self, row, col):
-        axial_view = QtWidgets.QPushButton("Axial")
-        coronal_view = QtWidgets.QPushButton("Coronal")
-        sagittal_view = QtWidgets.QPushButton("Sagittal")
-        
-        views_box_layout = QtWidgets.QVBoxLayout()
-        views_box_layout.addWidget(axial_view)
-        views_box_layout.addWidget(coronal_view)
-        views_box_layout.addWidget(sagittal_view)
-
-        views_box = QtWidgets.QGroupBox("Views")
-        views_box.setLayout(views_box_layout)
-
-        self.grid.addWidget(views_box, row, col)
-
-        # axial_view.clicked.connect(self.set_axial_view)
-        # coronal_view.clicked.connect(self.set_coronal_view)
-        # sagittal_view.clicked.connect(self.set_sagittal_view)
-
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow(app)
+    window = MainWindow()
     sys.exit(app.exec_())

@@ -3,7 +3,8 @@ APPLICATION_TITLE = "3D Segmentation Visualizer"
 MIN_IMG_WINDOW_WIDTH = 700
 
 # renderer
-RENDERER_BG_COLOR = (1., 1., 1.)
+COMPARE = False
+RENDERER_BG_COLOR = (0., 0., 0.)
 
 # mask config
 MASK_COLORS = [
@@ -17,8 +18,10 @@ SMOOTH_FACTOR = 200
 MAX_LABEL_LENGTH = 10
 
 # outline config
+SHOW_OUTLINE = False
 OUTLINE_COLOR = (0, 1, 1)
 OUTLINE_OPACITY = 0.2
+
 
 # transform config
 ROTATE_X = 110
@@ -27,4 +30,5 @@ ROTATE_Z = 5
 SCALE = (0.5, 0.5, 0.5)
 
 # axes config
+SHOW_AXES = False
 TOTAL_LENGTH = (30, 30, 30)
