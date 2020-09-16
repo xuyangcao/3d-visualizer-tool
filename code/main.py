@@ -31,6 +31,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.add_main_toolbar(row=0, col=0)
         self.add_vtk_window_widget(row=0, col=1, row_span=3, col_span=3)
 
+        # add dialogs 
+        self.p_Dlg = PreferenceDialog()
+
         # set layout and show
         self.render_window.Render()
         self.frame.setLayout(self.grid)
@@ -84,8 +87,7 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.warning(self, "Warning", "file type invalid!")
     
     def on_preference_triggered(self, ):
-        p_Dlg = PreferenceDialog()
-        p_Dlg.exec_()
+        self.p_Dlg.exec_()
 
     def setup_mask(self, renderer, file_name):
         if not COMPARE:
