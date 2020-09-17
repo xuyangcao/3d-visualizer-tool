@@ -3,7 +3,7 @@ GUI config
 """
 # main window, only for Qt GUI
 APPLICATION_TITLE = "3D Segmentation Visualizer"
-MIN_IMG_WINDOW_WIDTH = 700
+MIN_IMG_WINDOW_WIDTH = 800
 
 
 """
@@ -22,10 +22,10 @@ MAX_LABEL_LENGTH = 10
 
 # renderer
 COMPARE = False
-RENDERER_BG_COLOR = (1., 1., 1.)
+RENDERER_BG_COLOR = (0., 0., 0.)
 
 # outline config
-SHOW_OUTLINE = True
+SHOW_OUTLINE = True 
 OUTLINE_COLOR = (0, 1, 1)
 OUTLINE_OPACITY = 0.2
 

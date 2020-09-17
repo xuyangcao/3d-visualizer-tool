@@ -162,6 +162,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # must manually set column width for vtk_widget to maintain height:width ratio
         self.grid.setColumnMinimumWidth(col, MIN_IMG_WINDOW_WIDTH)
+        self.grid.setRowMinimumHeight(row, 600)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
