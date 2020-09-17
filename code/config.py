@@ -17,7 +17,7 @@ MASK_COLORS = [
     (1, 1, 0.)
 ]
 MASK_OPACITY = [0.9, 0.9, 0.9, 0.9]
-SMOOTH_FACTOR = 200
+SMOOTH_FACTOR = 50 
 MAX_LABEL_LENGTH = 10
 
 # renderer

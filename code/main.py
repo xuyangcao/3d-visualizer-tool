@@ -61,9 +61,18 @@ class MainWindow(QtWidgets.QMainWindow):
         interactor.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
 
         return frame, vtk_widget, renderer, render_window, interactor
+    
+    def clear_scene(self, ):
+        self.renderer.RemoveAllViewProps()
+    
+    def reload_scene(self, ):
+        self.renderer.Modified()
+        self.renderer.ResetCamera()
+        self.interactor.Render()
 
     def add_menubar(self, ):
         menubar = self.menuBar()
+        
         # file menu
         file_menu = menubar.addMenu("File")
         open_file_action = QtWidgets.QAction("Open", self)
@@ -71,6 +80,7 @@ class MainWindow(QtWidgets.QMainWindow):
         open_file_action.setStatusTip('Open new File')
         open_file_action.triggered.connect(self.open_file)
         file_menu.addAction(open_file_action)
+
         # edit menu
         edit_menu = menubar.addMenu("Edit")
         config_action = QtWidgets.QAction("Preference", self)
@@ -90,12 +100,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.p_Dlg.exec_()
 
     def setup_mask(self, renderer, file_name):
-        if not COMPARE:
-            actors = renderer.GetActors()
-            actors.InitTraversal()
-            for i in range(actors.GetNumberOfItems()):
-                actor = actors.GetNextActor()
-                renderer.RemoveActor(actor)
+        self.clear_scene()
 
         # reader
         reader = read_volume(file_name)
@@ -141,7 +146,7 @@ class MainWindow(QtWidgets.QMainWindow):
             axes_actor.SetTotalLength(TOTAL_LENGTH[0], TOTAL_LENGTH[1], TOTAL_LENGTH[2]) # set axes length
             renderer.AddActor(axes_actor)
 
-        self.renderer.ResetCamera()
+        self.reload_scene()
 
     def add_main_toolbar(self, row, col):
         toolbar_box = QtWidgets.QGroupBox("Main Toolbar")
